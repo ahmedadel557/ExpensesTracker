@@ -4,29 +4,55 @@ export default function TransactionsTable({
   startediting,
   totalExpense,
   totalIncome,
+  setFilter,
+  filter,
+  search,
+  setSearch,
 }) {
   let balance = totalIncome - totalExpense;
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    let filtered = filter === "all" || transaction.type === filter;
+    let searched = transaction.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    return filtered && searched;
+  });
+
   return (
-    <section className="mt-8 w-full">
+    <section className="mt-5 w-full">
       <div className="mb-3 flex flex-wrap items-center gap-2">
+        <span className="text-xl font-bold">Filter by :</span>
         <button
+          onClick={() => setFilter("all")}
           type="button"
-          className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-blue-800"
+          className={`rounded-lg border  px-4 py-2 text-sm border-gray-300 font-medium text-black hover:cursor-pointer ${filter === "all" ? `bg-black text-white` : `bg-white text-black`}`}
         >
           All
         </button>
         <button
+          onClick={() => setFilter("expense")}
           type="button"
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-red-600 hover:cursor-pointer"
+          className={`rounded-lg border  border-gray-300 px-4 py-2 text-sm font-medium hover:cursor-pointer ${filter === "expense" ? `bg-red-600 text-white` : `bg-white text-red-600`}`}
         >
           Expense
         </button>
         <button
+          onClick={() => setFilter("income")}
           type="button"
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-blue-600 hover:cursor-pointer"
+          className={`rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium ${filter === "income" ? `bg-blue-600 text-white` : `bg-white text-blue-600`} hover:cursor-pointer`}
         >
           Income
         </button>
+
+        <input
+          id="search"
+          className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          type="text"
+          placeholder="Search by title..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
 
       <div className="relative w-full max-w-full overflow-x-auto shadow-md sm:rounded-lg">
@@ -51,7 +77,7 @@ export default function TransactionsTable({
             </tr>
           </thead>
           <tbody className=" h-20">
-            {transactions.map((transaction) => (
+            {filteredTransactions.map((transaction) => (
               <tr
                 key={transaction.id}
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"

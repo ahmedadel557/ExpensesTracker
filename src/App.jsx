@@ -12,6 +12,8 @@ function App() {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [totalIncome, settotalIncome] = useState(0);
   const [totalExpense, settotalExpense] = useState(0);
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("")
 
   let formik = useFormik({
     initialValues: {
@@ -107,12 +109,20 @@ function App() {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <Form formik={formik} />
+        <div className="w-[80%] mx-auto h-0.25 bg-black my-3"></div>
+        <div>
+          <h2 className="text-center text-3xl  font-bold">Transactions</h2>
+        </div>
         <TransactionsTable
           deleteTransaction={deleteTransaction}
           transactions={transactions}
           startediting={startediting}
           totalIncome={totalIncome}
           totalExpense={totalExpense}
+          setFilter={setFilter}
+          filter={filter}
+          search={search}
+          setSearch={setSearch}
         />
       </main>
 

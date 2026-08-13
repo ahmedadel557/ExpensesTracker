@@ -3,8 +3,9 @@ export default function Form({ formik }) {
     <>
       <form
         onSubmit={formik.handleSubmit}
-        className="mx-auto w-full max-w-sm"
+        className="mx-auto w-full max-w-sm mb-5"
       >
+        <h2 className="text-3xl mb-2 font-bold">Transaction Info</h2>
         <div className="mb-5">
           <label
             htmlFor="title"
