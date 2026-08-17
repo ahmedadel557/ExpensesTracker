@@ -14,6 +14,7 @@ function App() {
   const [totalExpense, settotalExpense] = useState(0);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("")
+  const [sort, setSort] = useState("newest")
 
   let formik = useFormik({
     initialValues: {
@@ -123,6 +124,8 @@ function App() {
           filter={filter}
           search={search}
           setSearch={setSearch}
+          setSort={setSort}
+          sort={sort}
         />
       </main>
 

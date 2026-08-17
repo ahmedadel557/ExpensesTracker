@@ -8,6 +8,8 @@ export default function TransactionsTable({
   filter,
   search,
   setSearch,
+  setSort,
+  sort,
 }) {
   let balance = totalIncome - totalExpense;
 
@@ -18,11 +20,20 @@ export default function TransactionsTable({
       .includes(search.toLowerCase());
     return filtered && searched;
   });
+  let sortedTransactions = [...filteredTransactions].sort((a, b) => {
+    if (sort === "Highest") {
+      return Number(b.amount) - Number(a.amount);
+    }
+    if (sort === "Lowest") {
+      return Number(a.amount) - Number(b.amount);
+    }
+    return 0;
+  });
 
   return (
     <section className="mt-5 w-full">
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="text-xl font-bold">Filter by :</span>
+        <span className="text-md font-bold">Filter by :</span>
         <button
           onClick={() => setFilter("all")}
           type="button"
@@ -53,6 +64,25 @@ export default function TransactionsTable({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <div className="flex items-center">
+          <label
+            htmlFor="sort"
+            className=" mb-2 w-1/2 text-md font-bold text-gray-900 dark:text-white"
+          >
+            Sort By :
+          </label>
+          <select
+            onChange={(e) => setSort(e.target.value)}
+            id="sort"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option disabled>Choose a country</option>
+            <option value="Newest ">Newest </option>
+            <option value="Oldest">Oldest</option>
+            <option value="Highest">Highest amount</option>
+            <option value="Lowest">Lowest amount </option>
+          </select>
+        </div>
       </div>
 
       <div className="relative w-full max-w-full overflow-x-auto shadow-md sm:rounded-lg">
@@ -77,7 +107,7 @@ export default function TransactionsTable({
             </tr>
           </thead>
           <tbody className=" h-20">
-            {filteredTransactions.map((transaction) => (
+            {sortedTransactions.map((transaction) => (
               <tr
                 key={transaction.id}
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
